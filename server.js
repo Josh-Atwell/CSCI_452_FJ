@@ -3,6 +3,8 @@ const session = require("express-session");
 const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
 const app = express();
+var http = require('http');
+var fs = require('fs');
 
 const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
@@ -11,6 +13,7 @@ const dbInfo = {
   host: "localhost",
   user: "root",
   password: process.env.DBPASS,
+  //Below can be chaged to link up with Dylans DB name as well as table name @ line 58  and buildFunction
   database: "SongsDb"
 };
 
@@ -27,6 +30,7 @@ const sessionOptions = {
 };
 app.use(session(sessionOptions));
 
+app.all('/', serveIndex); 
 app.get("/functions", listFunctions);
 app.listen(3000, "localhost", startHandler);
 
@@ -50,6 +54,7 @@ function writeResult(res, object) {
 
 
 function getAndListFunctions(req, res) {
+  //Below can be chaged to link up with Dylans table name as well as db name @ line 16 and buildFunction
   connection.query("SELECT * FROM Songs ", function(err, dbResult) {
     if(err)
       writeResult(res, {error: err.message});
@@ -60,12 +65,18 @@ function getAndListFunctions(req, res) {
   });
 }
 
-function buildNode(dbObject) {
+function buildFunction(dbObject) {
   return {creator: dbObject.Id, language: dbObject.UserId, description: dbObject.Name, snippet:"null"};
 }
 
 
-
+function serveIndex(req, res)
+{
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  // Jatwells page connects here
+  var index = fs.readFileSync('index.html');
+  res.end(index);
+}
 
 
 
