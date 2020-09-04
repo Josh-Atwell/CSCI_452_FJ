@@ -47,8 +47,8 @@ function getAndListSnippets(req, res) {
     if(err)
       writeResult(res, {error: err.message});
     else {
-      let snippet = dbResult.map(function(node) {return buildSnippet(snippet)});
-      writeResult(res, {result: snippet});
+      let snippets = dbResult.map(function(snippet) {return buildSnippet(snippet)});
+      writeResult(res, {result: snippets});
     }
   });
 }
@@ -61,13 +61,10 @@ function buildSnippet(dbObject) {
 function serveIndex(req, res)
 {
   res.writeHead(200, {'Content-Type': 'text/html'});
-  // Josh's page connects here
+  // Jatwells page connects here
   var index = fs.readFileSync('index.html');
   res.end(index);
 }
-
-
-
 
 
 
