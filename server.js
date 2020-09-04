@@ -19,7 +19,7 @@ connection.connect(function(err) {
 
 
 app.all('/', serveIndex); 
-app.get("/functions", listFunctions);
+app.get("/snippets", listSnippets);
 app.listen(3000, "localhost", startHandler);
 
 function startHandler() {
@@ -28,10 +28,10 @@ function startHandler() {
   console.log("\x1b[37m","\x1b[41m","    ̿' ̿'\̵͇̿̿\з=(◕_◕)=ε/̵͇̿̿/'̿'̿ ̿     ","\x1b[0m");
 }
 
-function listFunctions(req, res) {
+function listSnippets(req, res) {
   let ip = req.ip;
   console.log(ip," is querying");
-  getAndListFunctions(req, res);
+  getAndListSnippets(req, res);
 }
 
 
@@ -41,19 +41,19 @@ function writeResult(res, object) {
 }
 
 
-function getAndListFunctions(req, res) {
+function getAndListSnippets(req, res) {
   //Below can be chaged to link up with Dylans table name as well as db name @ line 16 and buildFunction
   connection.query("SELECT * FROM Songs ", function(err, dbResult) {
     if(err)
       writeResult(res, {error: err.message});
     else {
-      let nodes = dbResult.map(function(node) {return buildNode(node)});
-      writeResult(res, {result: nodes});
+      let snippet = dbResult.map(function(node) {return buildSnippet(snippet)});
+      writeResult(res, {result: snippet});
     }
   });
 }
 
-function buildFunction(dbObject) {
+function buildSnippet(dbObject) {
   return {creator: dbObject.Id, language: dbObject.UserId, description: dbObject.Name, snippet:"null"};
 }
 
