@@ -18,4 +18,10 @@ class Database {
   }
 }
 
-module.exports = Database;
+//module.exports = Database;
+module.exports = {
+  HOST: "us-cdbr-east-02.cleardb.com",
+  USER: "bb29633743ac7a",
+  PASSWORD: "1ff7e6a8",
+  DB: "heroku_1937f2a43748d5c"
+};
