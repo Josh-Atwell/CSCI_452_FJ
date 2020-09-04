@@ -1,13 +1,8 @@
 const express = require("express");
-const session = require("express-session");
 const mysql = require("mysql");
-const bcrypt = require("bcryptjs");
 const app = express();
 var http = require('http');
 var fs = require('fs');
-
-const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 const dbInfo = {
   host: "localhost",
@@ -22,13 +17,6 @@ connection.connect(function(err) {
   if(err) throw err;
 });
 
-const sessionOptions = {
-  secret: "the code is in the node",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {maxAge: 60000}
-};
-app.use(session(sessionOptions));
 
 app.all('/', serveIndex); 
 app.get("/functions", listFunctions);
@@ -73,7 +61,7 @@ function buildFunction(dbObject) {
 function serveIndex(req, res)
 {
   res.writeHead(200, {'Content-Type': 'text/html'});
-  // Jatwells page connects here
+  // Josh's page connects here
   var index = fs.readFileSync('index.html');
   res.end(index);
 }
