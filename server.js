@@ -54,7 +54,7 @@ function getAndListSnippets(req, res) {
 }
 
 function buildSnippet(dbObject) {
-  return {creator: dbObject.User, language: dbObject.Creator, description: dbObject.Description, Snip: dbObject.Snip};
+  return {creator: dbObject.User, language: dbObject.Creator, description: dbObject.Description, Snip: dbObject.Snippet};
 }
 
 

@@ -4,12 +4,14 @@ CREATE DATABASE SnippetsDB;
 USE SnippetsDB;
 CREATE TABLE Snippet
 (
-  User INT NOT NULL,
+  Id INT NOT NULL AUTO_INCREMENT,
   Creator varchar(255) NOT NULL ,
   Lang varchar(255) NOT NULL,
   Description varchar (255) NOT NULL,
-  Snip varchar(255) NOT NULL
+  Snippet varchar(255) NOT NULL
+  PRIMARY KEY(Id),
+  UNIQUE KEY `UniqueIdandCreator` (`Id`,`Creator`)
 );
 
-INSERT INTO Snippet(User,Creator, Lang, Description, Snip)
-VALUES (1,'Dylan', 'Java', 'Describing', 'Textpad');
+INSERT INTO Snippet(Creator, Lang, Description, Snippet)
+VALUES ('Dylan', 'Java', 'Describing', 'Textpad');
