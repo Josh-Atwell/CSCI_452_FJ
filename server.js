@@ -9,7 +9,7 @@ const dbInfo = {
   user: "root",
   password: process.env.DBPASS,
   //Below can be chaged to link up with Dylans DB name as well as table name @ line 58  and buildFunction
-  database: "SongsDb"
+  database: "SnippetsDB"
 };
 
 const connection = mysql.createConnection(dbInfo);
@@ -43,7 +43,7 @@ function writeResult(res, object) {
 
 function getAndListSnippets(req, res) {
   //Below can be chaged to link up with Dylans table name as well as db name @ line 16 and buildFunction
-  connection.query("SELECT * FROM Songs ", function(err, dbResult) {
+  connection.query("SELECT * FROM Snippet ", function(err, dbResult) {
     if(err)
       writeResult(res, {error: err.message});
     else {
@@ -54,7 +54,7 @@ function getAndListSnippets(req, res) {
 }
 
 function buildSnippet(dbObject) {
-  return {creator: dbObject.Id, language: dbObject.UserId, description: dbObject.Name, snippet:"null"};
+  return {creator: dbObject.User, language: dbObject.Creator, description: dbObject.Description, Snip: dbObject.Snip};
 }
 
 
