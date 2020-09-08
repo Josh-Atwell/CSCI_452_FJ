@@ -43,7 +43,7 @@ function writeResult(res, object) {
 
 function getAndListSnippets(req, res) {
   //Below can be chaged to link up with Dylans table name as well as db name @ line 16 and buildFunction
-  connection.query("SELECT * FROM Snippet ", function(err, dbResult) {
+  connection.query("SELECT * FROM Snippets ", function(err, dbResult) {
     if(err)
       writeResult(res, {error: err.message});
     else {
@@ -54,7 +54,11 @@ function getAndListSnippets(req, res) {
 }
 
 function buildSnippet(dbObject) {
-  return {creator: dbObject.User, language: dbObject.Creator, description: dbObject.Description, Snip: dbObject.Snippet};
+  return {Id: dbObject.Snippet_Id,
+          Creator: dbObject.Creator ,
+          Language: dbObject.Language, 
+          Description: dbObject.Snippet_Desc, 
+          Snippet: dbObject.Snippet};
 }
 
 
