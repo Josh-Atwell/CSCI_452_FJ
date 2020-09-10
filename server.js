@@ -6,6 +6,7 @@ var fs = require('fs');
 
 const dbInfo = {
   host: "localhost",
+
   user: "root",
   password: process.env.DBPASS,
   //Below can be chaged to link up with Dylans DB name as well as table name @ line 58  and buildFunction
@@ -18,8 +19,10 @@ connection.connect(function(err) {
 });
 
 
-app.all('/', serveIndex); 
+app.use(express.static('public'))
+app.all('/', serveIndex);
 app.get("/snippets", listSnippets);
+app.get("/snippetsDESC", listSnippetsDESC);
 app.listen(3000, "localhost", startHandler);
 
 function startHandler() {
@@ -34,16 +37,31 @@ function listSnippets(req, res) {
   getAndListSnippets(req, res);
 }
 
-
+function listSnippetsDESC(req, res) {
+  let ip = req.ip;
+  console.log(ip," is querying");
+  getAndListSnippetsDESC(req, res);
+}
 function writeResult(res, object) {
   res.writeHead(200, {"Content-Type" : "application/json"});
   res.end(JSON.stringify(object));
 }
 
-
 function getAndListSnippets(req, res) {
   //Below can be chaged to link up with Dylans table name as well as db name @ line 16 and buildFunction
-  connection.query("SELECT * FROM Snippets ", function(err, dbResult) {
+  connection.query("SELECT * FROM Snippets ;", function(err, dbResult) {
+    if(err)
+      writeResult(res, {error: err.message});
+    else {
+      let snippets = dbResult.map(function(snippet) {return buildSnippet(snippet)});
+      writeResult(res, {result: snippets});
+    }
+  });
+}
+
+function getAndListSnippetsDESC(req, res) {
+  //Below can be chaged to link up with Dylans table name as well as db name @ line 16 and buildFunction
+  connection.query("SELECT * FROM Snippets ORDER BY Snippet_Id DESC;", function(err, dbResult) {
     if(err)
       writeResult(res, {error: err.message});
     else {
@@ -56,8 +74,8 @@ function getAndListSnippets(req, res) {
 function buildSnippet(dbObject) {
   return {Id: dbObject.Snippet_Id,
           Creator: dbObject.Creator ,
-          Language: dbObject.Language, 
-          Description: dbObject.Snippet_Desc, 
+          Language: dbObject.Lang, 
+          Description: dbObject.Description, 
           Snippet: dbObject.Snippet};
 }
 
@@ -69,7 +87,6 @@ function serveIndex(req, res)
   var index = fs.readFileSync('index.html');
   res.end(index);
 }
-
 
 
 
